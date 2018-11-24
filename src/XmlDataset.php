@@ -2,7 +2,8 @@
 
 namespace ByJG\AnyDataset\Xml;
 
-use ByJG\AnyDataset\Exception\DatasetException;
+use ByJG\AnyDataset\Core\GenericIterator;
+use ByJG\AnyDataset\Core\Exception\DatasetException;
 use ByJG\Util\XmlUtil;
 use DOMDocument;
 use InvalidArgumentException;
@@ -40,7 +41,7 @@ class XmlDataset
      * @param string $rowNode
      * @param string[] $colNode
      * @param array $registerNS
-     * @throws \ByJG\AnyDataset\Exception\DatasetException
+     * @throws DatasetException
      * @throws \ByJG\Util\Exception\XmlUtilException
      */
     public function __construct($xml, $rowNode, $colNode, $registerNS = null)
@@ -75,7 +76,7 @@ class XmlDataset
      */
     public function getIterator()
     {
-        $iterator = new XmlIterator(
+        return new XmlIterator(
             XmlUtil::selectNodes(
                 $this->domDocument->documentElement,
                 $this->rowNode,
@@ -84,6 +85,5 @@ class XmlDataset
             $this->colNodes,
             $this->registerNS
         );
-        return $iterator;
     }
 }
