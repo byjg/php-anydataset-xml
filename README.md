@@ -1,17 +1,16 @@
-# Xml AnyDataset
+# AnyDataset-Xml
 
 [![Opensource ByJG](https://img.shields.io/badge/opensource-byjg.com-brightgreen.svg)](http://opensource.byjg.com)
 [![Build Status](https://travis-ci.org/byjg/anydataset-xml.svg?branch=master)](https://travis-ci.org/byjg/anydataset-xml)
 
-## Description
 
 XML abstraction dataset. Anydataset is an agnostic data source abstraction layer in PHP. 
 
-See more about Anydataset [here](https://github.com/byjg/anydataset).
+See more about Anydataset [here](https://opensource.byjg.com/anydataset).
 
-## Examples
+# Examples
 
-### Simple Manipulation
+## Simple Manipulation
 
 ```php
 <?php
@@ -51,7 +50,7 @@ foreach ($iterator as $row) {
 }
 ```
 
-### Xml with namespaces
+## Xml with namespaces
 
 ```php
 <?php
@@ -113,11 +112,11 @@ $xmlDataset = new \ByJG\AnyDataset\Xml\XmlDataset(
 $xmlIterator = $xmlDataset->getIterator();
 ```
 
-## Install
+# Install
 
 Just type: `composer require "byjg/anydataset-xml=4.0.*"`
 
-## Running the Unit tests
+# Running the Unit tests
 
 ```php
 vendor/bin/phpunit
