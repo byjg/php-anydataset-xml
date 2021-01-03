@@ -4,7 +4,7 @@
 [![GitHub source](https://img.shields.io/badge/Github-source-informational?logo=github)](https://github.com/byjg/anydataset-xml/)
 [![GitHub license](https://img.shields.io/github/license/byjg/anydataset-xml.svg)](https://opensource.byjg.com/opensource/licensing.html)
 [![GitHub release](https://img.shields.io/github/release/byjg/anydataset-xml.svg)](https://github.com/byjg/anydataset-xml/releases/)
-[![Build Status](https://travis-ci.org/byjg/anydataset-xml.svg?branch=master)](https://travis-ci.org/byjg/anydataset-xml)
+[![Build Status](https://travis-ci.com/byjg/anydataset-xml.svg?branch=master)](https://travis-ci.com/byjg/anydataset-xml)
 
 
 XML abstraction dataset. Anydataset is an agnostic data source abstraction layer in PHP. 
