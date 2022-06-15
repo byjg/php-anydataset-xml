@@ -1,12 +1,6 @@
 {
   "name": "byjg/anydataset-xml",
   "description": "Anydataset Xml abstraction. Anydataset is an agnostic data source abstraction layer in PHP.",
-  "authors": [
-    {
-      "name": "João Gilberto Magalhães",
-      "email": "joao@byjg.com.br"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "ByJG\\AnyDataset\\Xml\\": "src/"
