@@ -125,5 +125,13 @@ Just type: `composer require "byjg/anydataset-xml=4.0.*"`
 vendor/bin/phpunit
 ```
 
+## Dependencies
+
+```mermaid
+flowchart TD
+    byjg/anydataset-xml --> byjg/anydataset
+    byjg/anydataset-xml --> byjg/xmlutil
+    byjg/anydataset-xml --> ext-dom
+```
 ----
 [Open source ByJG](http://opensource.byjg.com)

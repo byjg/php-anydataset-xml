@@ -39,7 +39,7 @@ class XmlDatasetTest extends TestCase
     protected $arrTest2 = array();
 
     // Run before each test case
-    public function setUp()
+    public function setUp(): void
     {
         $this->arrTest = array();
         $this->arrTest[] = array("category" => "COOKING", "title" => "Everyday Italian", "lang" => "en");
@@ -51,11 +51,6 @@ class XmlDatasetTest extends TestCase
         $this->arrTest2[] = array("id" => "OpenNew", "label" => "Open New");
     }
 
-    // Run end each test case
-    public function teardown()
-    {
-        
-    }
 
     public function testcreateXMLDataset()
     {
@@ -93,11 +88,9 @@ class XmlDatasetTest extends TestCase
         $this->assertEquals($count, 3);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testxmlNotWellFormatted()
     {
+        $this->expectException(\InvalidArgumentException::class);
         new XmlDataset(XmlDatasetTest::XML_NOTOK, $this->rootNode, $this->arrColumn);
     }
 
