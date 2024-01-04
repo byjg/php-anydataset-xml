@@ -130,7 +130,7 @@ $xmlIterator = $xmlDataset->getIterator();
 ## Install
 
 ```
-composer require "byjg/anydataset-xml
+composer require "byjg/anydataset-xml"
 ```
 
 ## Running the Unit tests
