@@ -19,19 +19,19 @@ example1.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <bookstore>
     <book category="COOKING">
-        <title lang="en">Everyday Italian</title>
+        <title lang="en-US">Everyday Italian</title>
         <author>Giada De Laurentiis</author>
         <year>2005</year>
         <price>30.00</price>
     </book>
     <book category="CHILDREN">
-        <title lang="de">Harry Potter</title>
+        <title lang="de-DE">Harry Potter</title>
         <author>J K. Rowling</author>
         <year>2005</year>
         <price>29.99</price>
     </book>
     <book category="WEB">
-        <title lang="pt">Learning XML</title>
+        <title lang="pt-BR">Learning XML</title>
         <author>Erik T. Ray</author>
         <year>2003</year>
         <price>39.95</price>
@@ -47,14 +47,22 @@ $xml = file_get_contents('example1.xml');
 $dataset = new \ByJG\AnyDataset\Xml\XmlDataset(
     $xml,        // The Xml
     "book",       // The node that represents a row
-    ["category" => "@category", "title" => "title", "lang" => "title/@lang"] // Mapping columns
+    [
+        "category" => "@category",
+        "title" => "title",
+        "lang" => "title/@lang",
+        "lang2" => function ($row) {
+            return substr($row->get('lang'), 0, 2);
+        }
+    ] // Mapping columns
 );
 
 $iterator = $dataset->getIterator();
 foreach ($iterator as $row) {
     echo $row->get('category'); // Print COOKING, CHILDREN, WEB
     echo $row->get('title');    // Print Everyday Italian, Harry Potter, Learning Xml
-    echo $row->get('lang');     // Print en, de, pt
+    echo $row->get('lang');     // Print en-US, de-DE, pt-BR
+    echo $row->get('lang2');    // Print en, de, pt
 }
 ```
 

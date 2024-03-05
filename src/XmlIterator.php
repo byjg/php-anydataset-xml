@@ -85,8 +85,14 @@ class XmlIterator extends GenericIterator
         $node = $this->nodeList->item($this->current++);
 
         $row = new Row();
+        $callables = [];
 
         foreach ($this->colNodes as $key => $colxpath) {
+            if (is_callable($colxpath)) {
+                $callables[$key] = $colxpath;
+                continue;
+            }
+
             $nodecol = XmlUtil::selectNodes($node, $colxpath, $this->registerNS);
             if (is_null($nodecol)) {
                 $row->addField(strtolower($key), "");
@@ -95,6 +101,10 @@ class XmlIterator extends GenericIterator
                     $row->addField(strtolower($key), $col->nodeValue);
                 }
             }
+        }
+
+        foreach ($callables as $key => $callable) {
+            $row->addField(strtolower($key), $callable($row));
         }
 
         return $row;
