@@ -186,7 +186,7 @@ class XmlDatasetTest extends TestCase
             "gd" => "http://schemas.google.com/g/2005"
         );
         $rootNode = 'fake:entry';
-        $colNode = array("id" => "fake:id", "updated" => "fake:updated", "name" => "fake:title", "email" => "gd:email/@address");
+        $colNode = array("id" => "fake:id", "updated" => "fake:updated", "name" => "fake:title", "email" => "gd:email/@address", "item" => function($row) { return $row->get("name") . " - " . $row->get("email"); });
         $xmlDataset = new XmlDataset($xml, $rootNode, $colNode, $namespace);
         $xmlIterator = $xmlDataset->getIterator();
 
@@ -199,12 +199,14 @@ class XmlDatasetTest extends TestCase
         $this->assertEquals("2013-10-05T22:16:03.564Z", $row->get("updated"));
         $this->assertEquals("Person 1", $row->get("name"));
         $this->assertEquals("p1@gmail.com", $row->get("email"));
+        $this->assertEquals("Person 1 - p1@gmail.com", $row->get("item"));
 
         $row = $xmlIterator->moveNext();
         $this->assertEquals("http://www.google.com/m8/feeds/contacts/my%40gmail.com/base/1", $row->get("id"));
         $this->assertEquals("2012-07-12T17:19:17.546Z", $row->get("updated"));
         $this->assertEquals("Person 2", $row->get("name"));
         $this->assertEquals("p2@gmail.com", $row->get("email"));
+        $this->assertEquals("Person 2 - p2@gmail.com", $row->get("item"));
     }
 
     /**
