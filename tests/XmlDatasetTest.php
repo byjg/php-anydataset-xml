@@ -5,7 +5,7 @@ namespace Tests;
 use ByJG\AnyDataset\Core\IteratorInterface;
 use ByJG\AnyDataset\Core\Row;
 use ByJG\AnyDataset\Xml\XmlDataset;
-use ByJG\Util\Exception\XmlUtilException;
+use ByJG\XmlUtil\Exception\XmlUtilException;
 use PHPUnit\Framework\TestCase;
 
 class XmlDatasetTest extends TestCase

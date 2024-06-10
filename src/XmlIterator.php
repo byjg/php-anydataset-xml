@@ -5,7 +5,8 @@ namespace ByJG\AnyDataset\Xml;
 use ByJG\AnyDataset\Core\GenericIterator;
 use ByJG\AnyDataset\Core\Exception\IteratorException;
 use ByJG\AnyDataset\Core\Row;
-use ByJG\Util\XmlNode;
+use ByJG\XmlUtil\Exception\XmlUtilException;
+use ByJG\XmlUtil\XmlNode;
 use DOMNodeList;
 use InvalidArgumentException;
 
@@ -74,7 +75,7 @@ class XmlIterator extends GenericIterator
      * @return Row
      * @throws IteratorException
      * @throws \ByJG\Serializer\Exception\InvalidArgumentException
-     * @throws \ByJG\Util\Exception\XmlUtilException
+     * @throws XmlUtilException
      */
     public function moveNext()
     {

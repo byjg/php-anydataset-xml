@@ -4,9 +4,9 @@ namespace ByJG\AnyDataset\Xml;
 
 use ByJG\AnyDataset\Core\GenericIterator;
 use ByJG\AnyDataset\Core\Exception\DatasetException;
-use ByJG\Util\Exception\XmlUtilException;
-use ByJG\Util\File;
-use ByJG\Util\XmlDocument;
+use ByJG\XmlUtil\Exception\XmlUtilException;
+use ByJG\XmlUtil\File;
+use ByJG\XmlUtil\XmlDocument;
 use DOMDocument;
 use InvalidArgumentException;
 
@@ -58,7 +58,7 @@ class XmlDataset
     /**
      * @access public
      * @return GenericIterator
-     * @throws \ByJG\Util\Exception\XmlUtilException
+     * @throws XmlUtilException
      */
     public function getIterator()
     {
