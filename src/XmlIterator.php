@@ -5,7 +5,7 @@ namespace ByJG\AnyDataset\Xml;
 use ByJG\AnyDataset\Core\GenericIterator;
 use ByJG\AnyDataset\Core\Exception\IteratorException;
 use ByJG\AnyDataset\Core\Row;
-use ByJG\Util\XmlUtil;
+use ByJG\Util\XmlNode;
 use DOMNodeList;
 use InvalidArgumentException;
 
@@ -93,7 +93,7 @@ class XmlIterator extends GenericIterator
                 continue;
             }
 
-            $nodecol = XmlUtil::selectNodes($node, $colxpath, $this->registerNS);
+            $nodecol = XmlNode::instance($node)->selectNodes($colxpath, $this->registerNS);
             if (is_null($nodecol)) {
                 $row->addField(strtolower($key), "");
             } else {

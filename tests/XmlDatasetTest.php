@@ -1,10 +1,11 @@
 <?php
 
-namespace Tests\AnyDataset\Dataset;
+namespace Tests;
 
 use ByJG\AnyDataset\Core\IteratorInterface;
 use ByJG\AnyDataset\Core\Row;
 use ByJG\AnyDataset\Xml\XmlDataset;
+use ByJG\Util\Exception\XmlUtilException;
 use PHPUnit\Framework\TestCase;
 
 class XmlDatasetTest extends TestCase
@@ -90,7 +91,7 @@ class XmlDatasetTest extends TestCase
 
     public function testxmlNotWellFormatted()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(XmlUtilException::class);
         new XmlDataset(XmlDatasetTest::XML_NOTOK, $this->rootNode, $this->arrColumn);
     }
 
