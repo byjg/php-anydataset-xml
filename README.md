@@ -152,7 +152,6 @@ vendor/bin/phpunit
 ```mermaid
 flowchart TD
     byjg/anydataset-xml --> byjg/anydataset
-    byjg/anydataset-xml --> byjg/xmlutil
     byjg/anydataset-xml --> ext-dom
 ```
 ----

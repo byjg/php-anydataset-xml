@@ -7,6 +7,7 @@ use ByJG\AnyDataset\Core\Exception\DatasetException;
 use ByJG\XmlUtil\Exception\XmlUtilException;
 use ByJG\XmlUtil\File;
 use ByJG\XmlUtil\XmlDocument;
+use ByJG\XmlUtil\XmlNode;
 use DOMDocument;
 use InvalidArgumentException;
 
@@ -18,35 +19,34 @@ class XmlDataset
      *
      * @var string
      */
-    private $rowNode = null;
+    private string $rowNode;
 
     /**
      * Enter description here...
      *
      * @var string[]
      */
-    private $colNodes = null;
+    private ?array $colNodes;
 
     /**
-     * @var DOMDocument
+     * @var XmlDocument
      */
-    private $domDocument;
+    private XmlDocument $domDocument;
 
     /**
      *
-     * @var string
+     * @var array
      */
-    protected $registerNS;
+    protected array $registerNS;
 
     /**
-     * @param DOMDocument|string|File $xml
+     * @param XmlNode|DOMDocument|string|File $xml
      * @param string $rowNode
      * @param string[] $colNode
-     * @param null $registerNS
-     * @throws DatasetException
+     * @param array $registerNS
      * @throws XmlUtilException
      */
-    public function __construct(DOMDocument|string|File $xml, string $rowNode, array $colNode, array $registerNS = [])
+    public function __construct(XmlNode|DOMDocument|string|File $xml, string $rowNode, array $colNode, array $registerNS = [])
     {
         $this->domDocument = new XmlDocument($xml);
 
@@ -60,7 +60,7 @@ class XmlDataset
      * @return GenericIterator
      * @throws XmlUtilException
      */
-    public function getIterator()
+    public function getIterator(): GenericIterator
     {
         return new XmlIterator(
             $this->domDocument->selectNodes(
