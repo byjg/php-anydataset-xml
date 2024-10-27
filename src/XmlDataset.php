@@ -4,7 +4,10 @@ namespace ByJG\AnyDataset\Xml;
 
 use ByJG\AnyDataset\Core\GenericIterator;
 use ByJG\AnyDataset\Core\Exception\DatasetException;
-use ByJG\Util\XmlUtil;
+use ByJG\XmlUtil\Exception\XmlUtilException;
+use ByJG\XmlUtil\File;
+use ByJG\XmlUtil\XmlDocument;
+use ByJG\XmlUtil\XmlNode;
 use DOMDocument;
 use InvalidArgumentException;
 
@@ -16,53 +19,36 @@ class XmlDataset
      *
      * @var string
      */
-    private $rowNode = null;
+    private string $rowNode;
 
     /**
      * Enter description here...
      *
      * @var string[]
      */
-    private $colNodes = null;
+    private ?array $colNodes;
 
     /**
-     * @var DOMDocument
+     * @var XmlDocument
      */
-    private $domDocument;
+    private XmlDocument $domDocument;
 
     /**
      *
-     * @var string
+     * @var array
      */
-    protected $registerNS;
+    protected array $registerNS;
 
     /**
-     * @param DOMDocument|string $xml
+     * @param XmlNode|DOMDocument|string|File $xml
      * @param string $rowNode
      * @param string[] $colNode
      * @param array $registerNS
-     * @throws DatasetException
-     * @throws \ByJG\Util\Exception\XmlUtilException
+     * @throws XmlUtilException
      */
-    public function __construct($xml, $rowNode, $colNode, $registerNS = null)
+    public function __construct(XmlNode|DOMDocument|string|File $xml, string $rowNode, array $colNode, array $registerNS = [])
     {
-        if (!is_array($colNode)) {
-            throw new DatasetException("XmlDataset constructor: Column nodes must be an array.");
-        }
-
-        if ($xml instanceof DOMDocument) {
-            $this->domDocument = $xml;
-        } else {
-            $this->domDocument = XmlUtil::createXmlDocumentFromStr($xml);
-        }
-
-        if (is_null($registerNS)) {
-            $registerNS = array();
-        }
-
-        if (!is_array($registerNS)) {
-            throw new InvalidArgumentException('The parameter $registerNS must be an associative array');
-        }
+        $this->domDocument = new XmlDocument($xml);
 
         $this->registerNS = $registerNS;
         $this->rowNode = $rowNode;
@@ -72,13 +58,12 @@ class XmlDataset
     /**
      * @access public
      * @return GenericIterator
-     * @throws \ByJG\Util\Exception\XmlUtilException
+     * @throws XmlUtilException
      */
-    public function getIterator()
+    public function getIterator(): GenericIterator
     {
         return new XmlIterator(
-            XmlUtil::selectNodes(
-                $this->domDocument->documentElement,
+            $this->domDocument->selectNodes(
                 $this->rowNode,
                 $this->registerNS
             ),
