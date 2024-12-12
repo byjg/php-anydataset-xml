@@ -3,13 +3,12 @@
 namespace ByJG\AnyDataset\Xml;
 
 use ByJG\AnyDataset\Core\GenericIterator;
-use ByJG\AnyDataset\Core\Exception\DatasetException;
+use ByJG\XmlUtil\Exception\FileException;
 use ByJG\XmlUtil\Exception\XmlUtilException;
 use ByJG\XmlUtil\File;
 use ByJG\XmlUtil\XmlDocument;
 use ByJG\XmlUtil\XmlNode;
 use DOMDocument;
-use InvalidArgumentException;
 
 class XmlDataset
 {
@@ -42,9 +41,10 @@ class XmlDataset
     /**
      * @param XmlNode|DOMDocument|string|File $xml
      * @param string $rowNode
-     * @param string[] $colNode
+     * @param array $colNode
      * @param array $registerNS
      * @throws XmlUtilException
+     * @throws FileException
      */
     public function __construct(XmlNode|DOMDocument|string|File $xml, string $rowNode, array $colNode, array $registerNS = [])
     {
