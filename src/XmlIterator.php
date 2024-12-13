@@ -47,27 +47,16 @@ class XmlIterator extends GenericIterator
             'row' => null,
             'i' => 0,
         ];
-    }
 
-    /**
-     * @access public
-     * @return bool
-     */
-    public function hasNext(): bool
-    {
-        return ($this->current["i"] < count($this->nodeList));
+        $this->parseXmlNode();
     }
 
     /**
      * @throws XmlUtilException
      */
-    protected function parseXmlNode(bool $next): ?RowInterface
+    protected function parseXmlNode(): ?RowInterface
     {
-        if ($this->current["row"] !== null && !$next) {
-            return $this->current["row"];
-        }
-
-        if (!$this->hasNext()) {
+        if (!$this->valid()) {
             return null;
         }
 
@@ -97,22 +86,9 @@ class XmlIterator extends GenericIterator
             $row->set(strtolower($key), $callable($row), append: true);
         }
 
-        $this->current = [
-            'row' => $next ? null : $row,
-            'i' => $rowNumber + ($next ? 1 : 0),
-        ];
+        $this->current["row"] = $row;
 
         return $row;
-    }
-
-    /**
-     * @access public
-     * @return Row|null
-     * @throws XmlUtilException
-     */
-    public function moveNext(): ?RowInterface
-    {
-        return $this->parseXmlNode(next: true);
     }
 
     public function key(): int
@@ -126,6 +102,20 @@ class XmlIterator extends GenericIterator
     #[ReturnTypeWillChange]
     public function current(): ?RowInterface
     {
-        return $this->parseXmlNode(next: false);
+        return $this->current["row"];
+    }
+
+    #[ReturnTypeWillChange]
+    public function next(): void
+    {
+        $this->current["i"]++;
+        $this->current["row"] = null;
+        $this->parseXmlNode();
+    }
+
+    #[ReturnTypeWillChange]
+    public function valid(): bool
+    {
+        return ($this->current["i"] < count($this->nodeList));
     }
 }
