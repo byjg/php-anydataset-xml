@@ -7,6 +7,7 @@ use ByJG\AnyDataset\Core\Row;
 use ByJG\AnyDataset\Core\RowInterface;
 use ByJG\AnyDataset\Xml\XmlDataset;
 use ByJG\XmlUtil\Exception\XmlUtilException;
+use Override;
 use PHPUnit\Framework\TestCase;
 
 class XmlDatasetTest extends TestCase
@@ -41,6 +42,7 @@ class XmlDatasetTest extends TestCase
     protected $arrTest2 = array();
 
     // Run before each test case
+    #[Override]
     public function setUp(): void
     {
         $this->arrTest = array();

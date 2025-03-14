@@ -9,6 +9,7 @@ use ByJG\AnyDataset\Core\RowInterface;
 use ByJG\XmlUtil\Exception\XmlUtilException;
 use ByJG\XmlUtil\XmlNode;
 use DOMNodeList;
+use Override;
 use ReturnTypeWillChange;
 
 class XmlIterator extends GenericIterator
@@ -91,21 +92,25 @@ class XmlIterator extends GenericIterator
         return $row;
     }
 
+    #[ReturnTypeWillChange]
+    #[Override]
     public function key(): int
     {
         return $this->current["i"];
     }
 
     /**
-     * @throws XmlUtilException
+     * @return RowInterface|null
      */
     #[ReturnTypeWillChange]
+    #[Override]
     public function current(): ?RowInterface
     {
         return $this->current["row"];
     }
 
     #[ReturnTypeWillChange]
+    #[Override]
     public function next(): void
     {
         $this->current["i"]++;
@@ -114,6 +119,7 @@ class XmlIterator extends GenericIterator
     }
 
     #[ReturnTypeWillChange]
+    #[Override]
     public function valid(): bool
     {
         return ($this->current["i"] < count($this->nodeList));
