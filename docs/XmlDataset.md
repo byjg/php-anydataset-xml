@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # XmlDataset
 
 The `XmlDataset` class is the main entry point for working with XML data in the AnyDataset library.
@@ -43,7 +47,7 @@ public function __construct(
 - **$rowNode**: XPath expression that identifies the nodes to be treated as rows
 
 - **$colNode**: Associative array mapping field names to XPath expressions
-  - Keys: The field names that will be accessible in the iterator
+  - Keys: The field names that will be accessible in the iterator (will be converted to lowercase)
   - Values: XPath expressions relative to the row node, or callback functions
 
 - **$registerNS**: Optional array of namespace prefixes and URIs
@@ -57,6 +61,12 @@ public function getIterator(): GenericIterator
 ```
 
 Returns an `XmlIterator` instance that can be used to iterate through the XML data.
+
+## Field Values Handling
+
+- When an XPath expression matches multiple nodes, the values are automatically collected in an array
+- All field names are converted to lowercase when accessed through the iterator
+- If no nodes match an XPath expression, an empty string is returned for that field
 
 ## Examples
 

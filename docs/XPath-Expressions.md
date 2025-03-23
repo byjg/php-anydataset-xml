@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # XPath Expressions in AnyDataset-Xml
 
 This library uses XPath expressions to select nodes and attributes from XML documents. Understanding XPath is essential for effectively using the AnyDataset-Xml library.
@@ -16,6 +20,12 @@ Here are some common XPath expressions used in the library:
 | `*`                  | Selects all elements                                             | `"book/*"` selects all child elements of book                                          |
 | `element[n]`         | Selects the nth element                                          | `"author[1]"` selects the first author element                                         |
 | `element[condition]` | Selects elements that satisfy the condition                      | `"book[@category='WEB']"` selects book elements with category attribute equal to 'WEB' |
+
+## Implementation Details
+
+- All field names in the resulting data are converted to lowercase
+- If an XPath expression doesn't match any nodes, an empty string is returned for that field
+- If an XPath expression matches multiple nodes, all values are collected automatically in an array
 
 ## Examples in AnyDataset-Xml
 
@@ -80,7 +90,7 @@ $colNodes = [
 
 ### Handling Repeated Nodes
 
-When an XPath expression matches multiple nodes, the values are returned as an array:
+When an XPath expression matches multiple nodes, the values are automatically collected in an array:
 
 ```php
 // For XML like:
@@ -90,6 +100,24 @@ When an XPath expression matches multiple nodes, the values are returned as an a
 // </book>
 
 $colNodes = [
-    "authors" => "author"  // Will return an array of all author elements
+    "authors" => "author"  // Will automatically return an array of all author values: ["Author 1", "Author 2"]
 ];
+
+// Access as:
+$authorArray = $row->get('authors');
+```
+
+### Accessing Field Values
+
+Remember that all field names are converted to lowercase when accessed:
+
+```php
+$colNodes = [
+    "Title" => "title",
+    "AUTHOR" => "author"
+];
+
+// Access using lowercase:
+$title = $row->get('title');  // Not $row->get('Title')
+$author = $row->get('author'); // Not $row->get('AUTHOR')
 ``` 
