@@ -126,7 +126,7 @@ class XmlDatasetTest extends TestCase
           <price>30.00</price>
         </book></bookstore>';
 
-        $xmlDataset = new XmlDataset($xml, $this->rootNode, array("author" => "author"));
+        $xmlDataset = new XmlDataset($xml, $this->rootNode, array("AUTHOR" => "author")); // It will be converted to author
         $xmlIterator = $xmlDataset->getIterator();
 
         $this->assertTrue($xmlIterator->valid());

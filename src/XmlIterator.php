@@ -29,12 +29,8 @@ class XmlIterator extends GenericIterator
      */
     private ?array $colNodes;
 
-    /**
-     * Enter description here...
-     *
-     * @var array
-     */
-    private array $current;
+    private ?RowInterface $currentRow = null;
+    private int $currentIndex = 0;
 
     protected array $registerNS;
 
@@ -43,13 +39,6 @@ class XmlIterator extends GenericIterator
         $this->registerNS = $registerNS;
         $this->nodeList = $nodeList;
         $this->colNodes = $colNodes;
-
-        $this->current = [
-            'row' => null,
-            'i' => 0,
-        ];
-
-        $this->parseXmlNode();
     }
 
     /**
@@ -61,33 +50,36 @@ class XmlIterator extends GenericIterator
             return null;
         }
 
-        $rowNumber = $this->current["i"];
+        $rowNumber = $this->currentIndex;
         $node = $this->nodeList->item($rowNumber);
 
         $row = new RowArray();
         $callables = [];
 
+        $xmlNode = XmlNode::instance($node);
+        $lowercaseKeys = array_map('strtolower', array_keys($this->colNodes));
+        $this->colNodes = array_combine($lowercaseKeys, array_values($this->colNodes));
         foreach ($this->colNodes as $key => $colXpath) {
             if (is_callable($colXpath)) {
                 $callables[$key] = $colXpath;
                 continue;
             }
 
-            $nodeCol = XmlNode::instance($node)->selectNodes($colXpath, $this->registerNS);
+            $nodeCol = $xmlNode->selectNodes($colXpath, $this->registerNS);
             if ($nodeCol->count() == 0) {
-                $row->set(strtolower($key), "");
+                $row->set($key, "");
             } else {
                 foreach ($nodeCol as $col) {
-                    $row->set(strtolower($key), $col->nodeValue, append: true);
+                    $row->set($key, $col->nodeValue, append: true);
                 }
             }
         }
 
         foreach ($callables as $key => $callable) {
-            $row->set(strtolower($key), $callable($row), append: true);
+            $row->set($key, $callable($row), append: true);
         }
 
-        $this->current["row"] = $row;
+        $this->currentRow = $row;
 
         return $row;
     }
@@ -96,7 +88,7 @@ class XmlIterator extends GenericIterator
     #[Override]
     public function key(): int
     {
-        return $this->current["i"];
+        return $this->currentIndex;
     }
 
     /**
@@ -106,22 +98,24 @@ class XmlIterator extends GenericIterator
     #[Override]
     public function current(): ?RowInterface
     {
-        return $this->current["row"];
+        if ($this->currentRow === null) {
+            $this->parseXmlNode();
+        }
+        return $this->currentRow;
     }
 
     #[ReturnTypeWillChange]
     #[Override]
     public function next(): void
     {
-        $this->current["i"]++;
-        $this->current["row"] = null;
-        $this->parseXmlNode();
+        $this->currentIndex++;
+        $this->currentRow = null;
     }
 
     #[ReturnTypeWillChange]
     #[Override]
     public function valid(): bool
     {
-        return ($this->current["i"] < count($this->nodeList));
+        return ($this->currentIndex < count($this->nodeList));
     }
 }
