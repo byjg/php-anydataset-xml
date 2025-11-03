@@ -1,5 +1,6 @@
 ---
 sidebar_position: 2
+title: XPath Expressions
 ---
 
 # XPath Expressions in AnyDataset-Xml
@@ -23,9 +24,11 @@ Here are some common XPath expressions used in the library:
 
 ## Implementation Details
 
+:::warning Key Points
 - All field names in the resulting data are converted to lowercase
 - If an XPath expression doesn't match any nodes, an empty string is returned for that field
 - If an XPath expression matches multiple nodes, all values are collected automatically in an array
+:::
 
 ## Examples in AnyDataset-Xml
 
@@ -109,7 +112,9 @@ $authorArray = $row->get('authors');
 
 ### Accessing Field Values
 
-Remember that all field names are converted to lowercase when accessed:
+:::caution Case Sensitivity
+All field names are converted to lowercase when accessed through the iterator.
+:::
 
 ```php
 $colNodes = [

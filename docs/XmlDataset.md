@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+title: XmlDataset
 ---
 
 # XmlDataset
@@ -64,9 +65,11 @@ Returns an `XmlIterator` instance that can be used to iterate through the XML da
 
 ## Field Values Handling
 
+:::info Important Behavior
 - When an XPath expression matches multiple nodes, the values are automatically collected in an array
 - All field names are converted to lowercase when accessed through the iterator
 - If no nodes match an XPath expression, an empty string is returned for that field
+:::
 
 ## Examples
 

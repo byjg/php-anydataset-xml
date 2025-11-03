@@ -51,7 +51,7 @@ $dataset = new \ByJG\AnyDataset\Xml\XmlDataset(
 $iterator = $dataset->getIterator();
 foreach ($iterator as $row) {
     echo $row->get('category'); // Print COOKING, CHILDREN, WEB
-    echo $row->get('title');    // Print Everyday Italian, Harry Potter, Learning Xml
+    echo $row->get('title');    // Print Everyday Italian, Harry Potter, Learning XML
     echo $row->get('lang');     // Print en-US, de-DE, pt-BR
     echo $row->get('lang2');    // Print en, de, pt
 }
