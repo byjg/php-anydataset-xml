@@ -18,16 +18,16 @@ class XmlIterator extends GenericIterator
     /**
      * Enter description here...
      *
-     * @var DOMNodeList|null
+     * @var DOMNodeList
      */
-    private ?DOMNodeList $nodeList;
+    private DOMNodeList $nodeList;
 
     /**
      * Enter description here...
      *
      * @var string[]
      */
-    private ?array $colNodes;
+    private array $colNodes;
 
     private ?RowInterface $currentRow = null;
     private int $currentIndex = 0;
@@ -36,7 +36,7 @@ class XmlIterator extends GenericIterator
 
     public function __construct(DOMNodeList $nodeList, array $colNodes, ?array $registerNS = null)
     {
-        $this->registerNS = $registerNS;
+        $this->registerNS = $registerNS ?? [];
         $this->nodeList = $nodeList;
         $this->colNodes = $colNodes;
     }
@@ -52,6 +52,10 @@ class XmlIterator extends GenericIterator
 
         $rowNumber = $this->currentIndex;
         $node = $this->nodeList->item($rowNumber);
+
+        if ($node === null) {
+            return null;
+        }
 
         $row = new RowArray();
         $callables = [];

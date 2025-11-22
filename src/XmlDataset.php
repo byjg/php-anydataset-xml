@@ -25,7 +25,7 @@ class XmlDataset
      *
      * @var string[]
      */
-    private ?array $colNodes;
+    private array $colNodes;
 
     /**
      * @var XmlDocument
