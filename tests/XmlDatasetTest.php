@@ -4,8 +4,10 @@ namespace Tests;
 
 use ByJG\AnyDataset\Core\IteratorInterface;
 use ByJG\AnyDataset\Core\Row;
+use ByJG\AnyDataset\Core\RowInterface;
 use ByJG\AnyDataset\Xml\XmlDataset;
 use ByJG\XmlUtil\Exception\XmlUtilException;
+use Override;
 use PHPUnit\Framework\TestCase;
 
 class XmlDatasetTest extends TestCase
@@ -40,6 +42,7 @@ class XmlDatasetTest extends TestCase
     protected $arrTest2 = array();
 
     // Run before each test case
+    #[Override]
     public function setUp(): void
     {
         $this->arrTest = array();
@@ -58,9 +61,8 @@ class XmlDatasetTest extends TestCase
         $xmlDataset = new XmlDataset(XmlDatasetTest::XML_OK, $this->rootNode, $this->arrColumn);
         $xmlIterator = $xmlDataset->getIterator();
 
-        $this->assertTrue($xmlIterator instanceof IteratorInterface);
-        $this->assertTrue($xmlIterator->hasNext());
-        $this->assertEquals($xmlIterator->Count(), 3);
+        $this->assertTrue($xmlIterator->valid());
+        $this->assertCount(3,  $xmlIterator->toArray());
     }
 
     public function testnavigateXMLIterator()
@@ -69,8 +71,9 @@ class XmlDatasetTest extends TestCase
         $xmlIterator = $xmlDataset->getIterator();
 
         $count = 0;
-        while ($xmlIterator->hasNext()) {
-            $this->assertSingleRow($xmlIterator->moveNext(), $count++);
+        while ($xmlIterator->valid()) {
+            $this->assertSingleRow($xmlIterator->current(), $count++);
+            $xmlIterator->next();
         }
 
         $this->assertEquals($count, 3);
@@ -100,7 +103,7 @@ class XmlDatasetTest extends TestCase
         $xmlDataset = new XmlDataset(XmlDatasetTest::XML_OK, "wrong", $this->arrColumn);
         $xmlIterator = $xmlDataset->getIterator();
 
-        $this->assertEquals($xmlIterator->count(), 0);
+        $this->assertCount(0, $xmlIterator->toArray());
     }
 
     public function testwrongColumn()
@@ -108,7 +111,7 @@ class XmlDatasetTest extends TestCase
         $xmlDataset = new XmlDataset(XmlDatasetTest::XML_OK, $this->rootNode, array("title" => "aaaa"));
         $xmlIterator = $xmlDataset->getIterator();
 
-        $this->assertEquals($xmlIterator->count(), 3);
+        $this->assertCount(3, $xmlIterator->toArray());
     }
 
     public function testrepeatedNodes()
@@ -123,22 +126,20 @@ class XmlDatasetTest extends TestCase
           <price>30.00</price>
         </book></bookstore>';
 
-        $xmlDataset = new XmlDataset($xml, $this->rootNode, array("author" => "author"));
+        $xmlDataset = new XmlDataset($xml, $this->rootNode, array("AUTHOR" => "author")); // It will be converted to author
         $xmlIterator = $xmlDataset->getIterator();
 
-        $this->assertTrue($xmlIterator instanceof IteratorInterface);
-        $this->assertTrue($xmlIterator->hasNext());
-        $this->assertEquals(1, $xmlIterator->Count());
+        $this->assertTrue($xmlIterator->valid());
 
-        $sr = $xmlIterator->moveNext();
-        $authors = $sr->getAsArray('author');
+        $sr = $xmlIterator->current();
+        $authors = $sr->get('author');
 
         $this->assertEquals(2, count($authors));
         $this->assertEquals('Giada De Laurentiis', $authors[0]);
         $this->assertEquals('Another Author', $authors[1]);
     }
 
-    public function testatomXml()
+    public function testAtomXml()
     {
         $xml = '<feed xmlns="http://www.w3.org/2005/Atom" xmlns:batch="http://schemas.google.com/gdata/batch" xmlns:gContact="http://schemas.google.com/contact/2008" xmlns:gd="http://schemas.google.com/g/2005" xmlns:openSearch="http://a9.com/-/spec/opensearchrss/1.0/">
             <id>myId</id>
@@ -152,7 +153,7 @@ class XmlDatasetTest extends TestCase
             <link rel="self" type="application/atom+xml" href="https://www.google.com/m8/feeds/contacts/my%40gmail.com/full?max-results=20"/>
             <link rel="next" type="application/atom+xml" href="https://www.google.com/m8/feeds/contacts/my%40gmail.com/full?max-results=20&amp;start-index=21"/>
             <author>
-             <name>My Name</name>
+             <n>My Name</n>
              <email>My Email</email>
             </author>
             <generator version="1.0" uri="http://www.google.com/m8/feeds">Contacts</generator>
@@ -187,22 +188,30 @@ class XmlDatasetTest extends TestCase
             "gd" => "http://schemas.google.com/g/2005"
         );
         $rootNode = 'fake:entry';
-        $colNode = array("id" => "fake:id", "updated" => "fake:updated", "name" => "fake:title", "email" => "gd:email/@address", "item" => function($row) { return $row->get("name") . " - " . $row->get("email"); });
+        $colNode = [
+            "id" => "fake:id",
+            "updated" => "fake:updated",
+            "name" => "fake:title",
+            "email" => "gd:email/@address",
+            "item" => function($row) { return $row->get("name") . " - " . $row->get("email"); }
+        ];
         $xmlDataset = new XmlDataset($xml, $rootNode, $colNode, $namespace);
         $xmlIterator = $xmlDataset->getIterator();
 
-        $this->assertTrue($xmlIterator instanceof IteratorInterface);
-        $this->assertTrue($xmlIterator->hasNext());
-        $this->assertEquals(2, $xmlIterator->Count());
+        $this->assertTrue($xmlIterator->valid());
 
-        $row = $xmlIterator->moveNext();
+        $rowCur = $xmlIterator->current();
+
+        $row = $rowCur;
         $this->assertEquals("http://www.google.com/m8/feeds/contacts/my%40gmail.com/base/0", $row->get("id"));
         $this->assertEquals("2013-10-05T22:16:03.564Z", $row->get("updated"));
         $this->assertEquals("Person 1", $row->get("name"));
         $this->assertEquals("p1@gmail.com", $row->get("email"));
         $this->assertEquals("Person 1 - p1@gmail.com", $row->get("item"));
+        $this->assertEquals($row, $rowCur);
 
-        $row = $xmlIterator->moveNext();
+        $xmlIterator->next();
+        $row = $xmlIterator->current();
         $this->assertEquals("http://www.google.com/m8/feeds/contacts/my%40gmail.com/base/1", $row->get("id"));
         $this->assertEquals("2012-07-12T17:19:17.546Z", $row->get("updated"));
         $this->assertEquals("Person 2", $row->get("name"));
@@ -212,13 +221,13 @@ class XmlDatasetTest extends TestCase
 
     /**
 
-     * @param Row $sr
+     * @param RowInterface $sr
      */
     public function assertSingleRow($sr, $count)
     {
-        $this->assertEquals($sr->get("category"), $this->arrTest[$count]["category"]);
-        $this->assertEquals($sr->get("title"), $this->arrTest[$count]["title"]);
-        $this->assertEquals($sr->get("lang"), $this->arrTest[$count]["lang"]);
+        $this->assertEquals($this->arrTest[$count]["category"], $sr->get("category"), "Row $count");
+        $this->assertEquals($this->arrTest[$count]["title"], $sr->get("title"), "Row $count");
+        $this->assertEquals($this->arrTest[$count]["lang"], $sr->get("lang"), "Row $count");
     }
 
 }
