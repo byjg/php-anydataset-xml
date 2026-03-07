@@ -1,10 +1,4 @@
----
-tags: [php, anydataset, text-manipulation]
----
-
 # AnyDataset-Xml
-
-XML abstraction dataset for the AnyDataset library. AnyDataset is an agnostic data source abstraction layer in PHP.
 
 [![Sponsor](https://img.shields.io/badge/Sponsor-%23ea4aaa?logo=githubsponsors&logoColor=white&labelColor=0d1117)](https://github.com/sponsors/byjg)
 [![Build Status](https://github.com/byjg/php-anydataset-xml/actions/workflows/phpunit.yml/badge.svg?branch=master)](https://github.com/byjg/php-anydataset-xml/actions/workflows/phpunit.yml)
@@ -12,6 +6,8 @@ XML abstraction dataset for the AnyDataset library. AnyDataset is an agnostic da
 [![GitHub source](https://img.shields.io/badge/Github-source-informational?logo=github)](https://github.com/byjg/php-anydataset-xml/)
 [![GitHub license](https://img.shields.io/github/license/byjg/php-anydataset-xml.svg)](https://opensource.byjg.com/opensource/licensing.html)
 [![GitHub release](https://img.shields.io/github/release/byjg/php-anydataset-xml.svg)](https://github.com/byjg/php-anydataset-xml/releases/)
+
+XML abstraction dataset for the AnyDataset library. AnyDataset is an agnostic data source abstraction layer in PHP.
 
 ## Features
 
@@ -25,8 +21,8 @@ XML abstraction dataset for the AnyDataset library. AnyDataset is an agnostic da
 
 ## Documentation
 
-- [XmlDataset](XmlDataset) - Main class for working with XML data
-- [XPath Expressions](XPath-Expressions) - Guide to using XPath in the library
+- [XmlDataset](docs/XmlDataset.md) - Main class for working with XML data
+- [XPath Expressions](docs/XPath-Expressions.md) - Guide to using XPath in the library
 
 ## Installation
 
