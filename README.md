@@ -11,7 +11,7 @@ XML abstraction dataset for the AnyDataset library. AnyDataset is an agnostic da
 [![Build Status](https://github.com/byjg/php-anydataset-xml/actions/workflows/phpunit.yml/badge.svg?branch=master)](https://github.com/byjg/php-anydataset-xml/actions/workflows/phpunit.yml)
 [![Opensource ByJG](https://img.shields.io/badge/opensource-byjg-success.svg)](http://opensource.byjg.com)
 [![GitHub source](https://img.shields.io/badge/Github-source-informational?logo=github)](https://github.com/byjg/php-anydataset-xml/)
-[![GitHub license](https://img.shields.io/github/license/byjg/php-anydataset-xml.svg)](https://opensource.byjg.com/opensource/licensing.html)
+[![GitHub license](https://img.shields.io/github/license/byjg/php-anydataset-xml.svg)](https://opensource.byjg.com/license/)
 [![GitHub release](https://img.shields.io/github/release/byjg/php-anydataset-xml.svg)](https://github.com/byjg/php-anydataset-xml/releases/)
 
 ## Features
@@ -61,14 +61,6 @@ foreach ($iterator as $row) {
     echo $row->get('lang');     // Print en-US, de-DE, pt-BR
     echo $row->get('lang2');    // Print en, de, pt
 }
-```
-
-## Dependencies
-
-```mermaid
-flowchart TD
-    byjg/anydataset-xml --> byjg/anydataset
-    byjg/anydataset-xml --> ext-dom
 ```
 
 ## Running the Unit Tests
