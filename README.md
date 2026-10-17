@@ -30,12 +30,6 @@ XML abstraction dataset for the AnyDataset library. AnyDataset is an agnostic da
 - [XmlDataset](docs/xml-dataset.md) - Main class for working with XML data
 - [XPath Expressions](docs/xpath-expressions.md) - Guide to using XPath in the library
 
-## Installation
-
-```bash
-composer require "byjg/anydataset-xml"
-```
-
 ## Quick Example
 
 ```php
@@ -62,6 +56,12 @@ foreach ($iterator as $row) {
     echo $row->get('lang');     // Print en-US, de-DE, pt-BR
     echo $row->get('lang2');    // Print en, de, pt
 }
+```
+
+## Installation
+
+```bash
+composer require "byjg/anydataset-xml"
 ```
 
 ## Running Tests
