@@ -79,7 +79,8 @@ $dataset = new \ByJG\AnyDataset\Xml\XmlDataset(
 
 ### Custom Field Processing
 
-You can use callback functions to process field values:
+You can use callback functions to process field values. The callback must be a closure,
+an invokable object or an `[$object, 'method']` array; a string is always treated as an XPath:
 
 ```php
 $colNodes = [

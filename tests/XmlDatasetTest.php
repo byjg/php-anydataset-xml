@@ -223,6 +223,19 @@ class XmlDatasetTest extends TestCase
 
      * @param RowInterface $sr
      */
+    public function testXpathWithPhpFunctionName()
+    {
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'
+            . '<root><item><date>2024-01-01</date><key>k1</key><trim>t1</trim></item></root>';
+
+        $xmlDataset = new XmlDataset($xml, "item", ["date" => "date", "key" => "key", "trim" => "trim"]);
+
+        $this->assertEquals(
+            [["date" => "2024-01-01", "key" => "k1", "trim" => "t1"]],
+            $xmlDataset->getIterator()->toArray()
+        );
+    }
+
     public function assertSingleRow($sr, $count)
     {
         $this->assertEquals($this->arrTest[$count]["category"], $sr->get("category"), "Row $count");

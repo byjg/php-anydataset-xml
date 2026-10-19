@@ -5,7 +5,14 @@
 
 ## Breaking Changes
 
-- None.
+- A field definition given as a string is now always treated as an XPath. Before, a string
+  naming a PHP function (e.g. `"strtoupper"`) was called as a callback; use a closure instead.
+
+## Bug Fixes
+
+- `XmlIterator` called a column XPath as a PHP function when it matched a function name, so
+  columns like `"date"` or `"key"` threw a `TypeError` or returned garbage. Only non-string
+  callables (closures, invokable objects, array callables) are called now.
 
 ## Requirements
 

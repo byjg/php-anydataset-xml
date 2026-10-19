@@ -25,7 +25,7 @@ class XmlIterator extends GenericIterator
     /**
      * Enter description here...
      *
-     * @var string[]
+     * @var array<string, string|callable>
      */
     private array $colNodes;
 
@@ -64,7 +64,7 @@ class XmlIterator extends GenericIterator
         $lowercaseKeys = array_map('strtolower', array_keys($this->colNodes));
         $this->colNodes = array_combine($lowercaseKeys, array_values($this->colNodes));
         foreach ($this->colNodes as $key => $colXpath) {
-            if (is_callable($colXpath)) {
+            if (!is_string($colXpath) && is_callable($colXpath)) {
                 $callables[$key] = $colXpath;
                 continue;
             }
