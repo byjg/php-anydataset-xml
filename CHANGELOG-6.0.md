@@ -12,12 +12,12 @@ Version 6.0 represents a major update to the AnyDataset-XML library, focusing on
 - Improved Psalm static analysis support with adjusted error levels
 
 ### PHP 8.4 Support
-- Added support for PHP 8.4 (requirement now >=8.3 <8.6)
+- Added support for PHP 8.4 (requirement now `>=8.3 <8.6`)
 - Updated development dependencies to support latest PHP versions
 
 ### Improved Documentation
-- Added comprehensive [XmlDataset documentation](docs/XmlDataset.md)
-- Added detailed [XPath Expressions guide](docs/XPath-Expressions.md)
+- Added comprehensive [XmlDataset documentation](docs/xml-dataset.md)
+- Added detailed [XPath Expressions guide](docs/xpath-expressions.md)
 - Restructured README with clearer feature descriptions and quick examples
 - Added sponsor badge to README
 
