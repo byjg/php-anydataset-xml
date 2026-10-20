@@ -49,7 +49,9 @@ public function __construct(
 
 - **$colNode**: Associative array mapping field names to XPath expressions
   - Keys: The field names that will be accessible in the iterator (will be converted to lowercase)
-  - Values: XPath expressions relative to the row node, or callback functions
+  - Values: XPath expressions relative to the row node, or callback functions (closures,
+    invokable objects or `[$object, 'method']` arrays). A string is always treated as an XPath,
+    even if it is the name of a PHP function (e.g. `"date"`).
 
 - **$registerNS**: Optional array of namespace prefixes and URIs
 
