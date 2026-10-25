@@ -5,7 +5,7 @@ tags: [php, anydataset, text-manipulation]
 
 # AnyDataset-Xml
 
-XML abstraction dataset for the AnyDataset library. AnyDataset is an agnostic data source abstraction layer in PHP.
+Read an XML document as a table: choose the node that is a row, map each field with XPath, iterate the rows.
 
 [![Sponsor](https://img.shields.io/badge/Sponsor-%23ea4aaa?logo=githubsponsors&logoColor=white&labelColor=0d1117)](https://github.com/sponsors/byjg)
 [![Build Status](https://github.com/byjg/php-anydataset-xml/actions/workflows/phpunit.yml/badge.svg?branch=master)](https://github.com/byjg/php-anydataset-xml/actions/workflows/phpunit.yml)
@@ -14,6 +14,26 @@ XML abstraction dataset for the AnyDataset library. AnyDataset is an agnostic da
 [![GitHub source](https://img.shields.io/badge/Github-source-informational?logo=github)](https://github.com/byjg/php-anydataset-xml/)
 [![GitHub license](https://img.shields.io/github/license/byjg/php-anydataset-xml.svg)](https://opensource.byjg.com/license/)
 [![GitHub release](https://img.shields.io/github/release/byjg/php-anydataset-xml.svg)](https://github.com/byjg/php-anydataset-xml/releases/)
+
+## Why
+
+Reading XML with DOM or SimpleXML means walking nodes, handling namespaces and repeated
+elements, and converting every value by hand, each time with different code.
+
+XmlDataset turns it into rows. Say which node is a row and map each field with an XPath
+expression (or a closure), namespaces included:
+
+```php
+$dataset = new XmlDataset($xml, 'book', [
+    'category' => '@category',
+    'title'    => 'title',
+    'lang'     => 'title/@lang',
+]);
+```
+
+The result is the same iterator of rows as every other
+[AnyDataset](https://opensource.byjg.com/anydataset) source, so the code that reads it does
+not care that the data was XML.
 
 ## Features
 
