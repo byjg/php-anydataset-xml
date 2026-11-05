@@ -7,6 +7,35 @@
 
 - A field definition given as a string is now always treated as an XPath. Before, a string
   naming a PHP function (e.g. `"strtoupper"`) was called as a callback; use a closure instead.
+- `XmlIterator` is generator based: it follows byjg/anydataset 7.0 `GenericIterator`
+  (`IteratorAggregate`, forward only, a static `rows()`; see its changelog). Its constructor accepts any
+  `iterable` of nodes, not only a `DOMNodeList`, and `parseXmlNode()` is now
+  `protected static parseXmlNode(DOMNode $node, array $colNodes, array $registerNS)`. The column names
+  are lower-cased once, in the constructor.
+
+## New Features
+
+### Large XML files: `XmlStreamDataset`
+
+`XmlStreamDataset` reads an XML file one row element at a time with byjg/serializer `XmlBlockReader`:
+only the element being read is in memory, not the whole document as `XmlDataset` loads it.
+
+```php
+$dataset = new XmlStreamDataset(
+    '/data/contacts.xml',
+    'atom:entry',                                        // the row elements, by name, at any depth
+    ['id' => 'atom:id', 'email' => 'gd:email/@address'], // the columns, as in XmlDataset
+    ['atom' => 'http://www.w3.org/2005/Atom', 'gd' => 'http://schemas.google.com/g/2005']
+);
+```
+
+- The rows are the elements with a **name**, not an XPath (no path, no predicate). With a prefix of
+  `$registerNS`, the elements of that namespace, whatever prefix the file uses; otherwise the name as
+  written in the file. An element with that name inside a row is part of the row.
+- The columns are the same as in `XmlDataset`: an XPath relative to the row element, or a callable.
+- The file is read again on each `getIterator()`, and closed when the rows end or the iterator is dropped.
+
+**Documentation:** [XmlStreamDataset](docs/xml-stream-dataset.md)
 
 ## Bug Fixes
 
@@ -22,6 +51,7 @@
 ### ByJG dependencies
 
 - `byjg/anydataset` is now `^7.0`.
+- `byjg/serializer` `^7.0` is now required directly (it came only through `byjg/anydataset`).
 
 While 7.0 is unreleased these resolve to `7.0.x-dev` from each component's
 `7.0` branch, via `minimum-stability: dev` with `prefer-stable: true`.
