@@ -8,7 +8,6 @@ use ByJG\AnyDataset\Core\RowInterface;
 use ByJG\XmlUtil\Exception\XmlUtilException;
 use ByJG\XmlUtil\XmlNode;
 use DOMNode;
-use DOMNodeList;
 use Generator;
 use Override;
 
@@ -16,14 +15,14 @@ class XmlIterator extends GenericIterator
 {
 
     /**
-     * Enter description here...
+     * The row nodes
      *
-     * @var DOMNodeList
+     * @var iterable<DOMNode>
      */
-    private DOMNodeList $nodeList;
+    private iterable $nodes;
 
     /**
-     * Enter description here...
+     * The XPath (or callable) of each column
      *
      * @var array<string, string|callable>
      */
@@ -31,10 +30,15 @@ class XmlIterator extends GenericIterator
 
     protected array $registerNS;
 
-    public function __construct(DOMNodeList $nodeList, array $colNodes, ?array $registerNS = null)
+    /**
+     * @param iterable<DOMNode> $nodes The row nodes: a DOMNodeList, or the elements read from a file one at a time
+     * @param array $colNodes
+     * @param array|null $registerNS
+     */
+    public function __construct(iterable $nodes, array $colNodes, ?array $registerNS = null)
     {
         $this->registerNS = $registerNS ?? [];
-        $this->nodeList = $nodeList;
+        $this->nodes = $nodes;
         $this->colNodes = array_change_key_case($colNodes);
     }
 
@@ -44,15 +48,16 @@ class XmlIterator extends GenericIterator
     #[Override]
     protected function rows(): Generator
     {
-        return self::walk($this->nodeList, $this->colNodes, $this->registerNS);
+        return self::walk($this->nodes, $this->colNodes, $this->registerNS);
     }
 
     /**
+     * @param iterable<DOMNode> $nodes
      * @throws XmlUtilException
      */
-    private static function walk(DOMNodeList $nodeList, array $colNodes, array $registerNS): Generator
+    private static function walk(iterable $nodes, array $colNodes, array $registerNS): Generator
     {
-        foreach ($nodeList as $node) {
+        foreach ($nodes as $node) {
             yield self::parseXmlNode($node, $colNodes, $registerNS);
         }
     }
